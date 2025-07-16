@@ -5,7 +5,8 @@ local ScriptBox = Instance.new("TextBox")
 local Execute = Instance.new("TextButton")
 local Clear = Instance.new("TextButton")
 
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.Name = "Executor"
+ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 Frame.Parent = ScreenGui
