@@ -74,33 +74,20 @@ Clear.Text = "Clear"
 Clear.TextColor3 = Color3.fromRGB(100, 100, 100)
 Clear.TextSize = 14.000
 
--- Scripts:
-
-local function SUXHIO_fake_script() -- Execute.Execute 
-	local script = Instance.new('LocalScript', Execute)
-
 	local button = script.Parent
 	local textBox = button.Parent:WaitForChild("ScriptBox")
 	
 	button.MouseButton1Click:Connect(function()
 		loadstring(textBox.Text)
 	end)
-end
-coroutine.wrap(SUXHIO_fake_script)()
-local function WPHFR_fake_script() -- Clear.Clear 
-	local script = Instance.new('LocalScript', Clear)
 
 	local button = script.Parent
-	local textBox = button.Parent:WaitForChild("ScriptBox") -- adjust name if needed
+	local textBox = button.Parent:WaitForChild("ScriptBox")
 	
 	button.MouseButton1Click:Connect(function()
 		textBox.Text = ""
 	end)
-end
-coroutine.wrap(WPHFR_fake_script)()
-local function TQIWWX_fake_script() -- Frame.Drag 
-	local script = Instance.new('LocalScript', Frame)
-
+	
 	local frame = script.Parent
 	local UserInputService = game:GetService("UserInputService")
 	
@@ -132,9 +119,7 @@ local function TQIWWX_fake_script() -- Frame.Drag
 				startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 		end
 	end)
-end
-coroutine.wrap(TQIWWX_fake_script)()
-local function AGTX_fake_script() -- ScreenGui.Dis-ena 
+
 	local script = Instance.new('LocalScript', ScreenGui)
 
 	local UserInputService = game:GetService("UserInputService")
@@ -153,6 +138,3 @@ local function AGTX_fake_script() -- ScreenGui.Dis-ena
 			screenGui.Enabled = guiEnabled
 		end
 	end)
-	
-end
-coroutine.wrap(AGTX_fake_script)()
