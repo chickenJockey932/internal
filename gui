@@ -73,19 +73,13 @@ Clear.Font = Enum.Font.SourceSans
 Clear.Text = "Clear"
 Clear.TextColor3 = Color3.fromRGB(100, 100, 100)
 Clear.TextSize = 14.000
-
-	local button = script.Parent
-	local textBox = button.Parent:WaitForChild("ScriptBox")
 	
-	button.MouseButton1Click:Connect(function()
-		loadstring(textBox.Text)
+	Execute.MouseButton1Click:Connect(function()
+		loadstring(ScriptBox.Text)
 	end)
-
-	local button = script.Parent
-	local textBox = button.Parent:WaitForChild("ScriptBox")
 	
-	button.MouseButton1Click:Connect(function()
-		textBox.Text = ""
+	Clear.MouseButton1Click:Connect(function()
+		ScriptBox.Text = ""
 	end)
 	
 	local frame = script.Parent
