@@ -37,20 +37,26 @@ ScriptBox.Parent = Frame
 ScriptBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 ScriptBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ScriptBox.BorderSizePixel = 0
-ScriptBox.Position = UDim2.new(0, 0, 0.100334242, 0)
+ScriptBox.Position = UDim2.new(0, 0, 0.117056653, 0)
 ScriptBox.Size = UDim2.new(0, 421, 0, 229)
+ScriptBox.ClearTextOnFocus = false
 ScriptBox.Font = Enum.Font.SourceSans
+ScriptBox.MultiLine = true
+ScriptBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+ScriptBox.PlaceholderText = "print(\"Welcome To Syntra Press The Insert Key To Hide Syntra\")"
 ScriptBox.Text = ""
-ScriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+ScriptBox.TextColor3 = Color3.fromRGB(150, 150, 150)
 ScriptBox.TextSize = 14.000
+ScriptBox.TextXAlignment = Enum.TextXAlignment.Left
+ScriptBox.TextYAlignment = Enum.TextYAlignment.Top
 
 Execute.Name = "Execute"
 Execute.Parent = Frame
 Execute.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Execute.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Execute.BorderSizePixel = 0
-Execute.Position = UDim2.new(-0.00150315301, 0, 0.860436082, 0)
-Execute.Size = UDim2.new(0, 74, 0, 41)
+Execute.Position = UDim2.new(0, 0, 0.903914332, 0)
+Execute.Size = UDim2.new(0, 72, 0, 27)
 Execute.Font = Enum.Font.SourceSans
 Execute.Text = "Execute"
 Execute.TextColor3 = Color3.fromRGB(100, 100, 100)
@@ -61,50 +67,74 @@ Clear.Parent = Frame
 Clear.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Clear.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Clear.BorderSizePixel = 0
-Clear.Position = UDim2.new(0.822163224, 0, 0.866220534, 0)
-Clear.Size = UDim2.new(0, 74, 0, 39)
+Clear.Position = UDim2.new(0.824527323, 0, 0.903009832, 0)
+Clear.Size = UDim2.new(0, 72, 0, 27)
 Clear.Font = Enum.Font.SourceSans
 Clear.Text = "Clear"
 Clear.TextColor3 = Color3.fromRGB(100, 100, 100)
 Clear.TextSize = 14.000
 
-Clear.MouseButton1Click:Connect(function()
-	ScriptBox.Text = ""
-end)
+-- Scripts:
 
-Execute.MouseButton1Click:Connect(function()
-	loadstring(ScriptBox.Text)()
-end)
+local function SUXHIO_fake_script() -- Execute.Execute 
+	local script = Instance.new('LocalScript', Execute)
 
-local UIS = game:GetService('UserInputService')
-local dragToggle, dragStart, startPos = nil, nil, nil
-
-local function updateInput(input)
-	local delta = input.Position - dragStart
-	Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	local button = script.Parent
+	local textBox = button.Parent:WaitForChild("ScriptBox")
+	
+	button.MouseButton1Click:Connect(function()
+		loadstring(textBox.Text)
+	end)
 end
+coroutine.wrap(SUXHIO_fake_script)()
+local function WPHFR_fake_script() -- Clear.Clear 
+	local script = Instance.new('LocalScript', Clear)
 
-Frame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragToggle = true
-		dragStart = input.Position
-		startPos = Frame.Position
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragToggle = false
-			end
-		end)
-	end
-end)
+	local button = script.Parent
+	local textBox = button.Parent:WaitForChild("ScriptBox") -- adjust name if needed
+	
+	button.MouseButton1Click:Connect(function()
+		textBox.Text = ""
+	end)
+end
+coroutine.wrap(WPHFR_fake_script)()
+local function TQIWWX_fake_script() -- Frame.Drag 
+	local script = Instance.new('LocalScript', Frame)
 
-UIS.InputChanged:Connect(function(input)
-	if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragToggle then
-		updateInput(input)
-	end
-end)
-
-
-local function OYAZ_fake_script() -- ScreenGui.LocalScript 
+	local frame = script.Parent
+	local UserInputService = game:GetService("UserInputService")
+	
+	local dragging = false
+	local dragStart = nil
+	local startPos = nil
+	
+	-- Capture when the mouse button goes down
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = frame.Position
+	
+			-- Optional: Capture the input so nothing else interrupts it
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+	
+	-- Update the frame position as the mouse moves
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			local delta = input.Position - dragStart
+			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+				startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+	end)
+end
+coroutine.wrap(TQIWWX_fake_script)()
+local function AGTX_fake_script() -- ScreenGui.Dis-ena 
 	local script = Instance.new('LocalScript', ScreenGui)
 
 	local UserInputService = game:GetService("UserInputService")
@@ -123,5 +153,6 @@ local function OYAZ_fake_script() -- ScreenGui.LocalScript
 			screenGui.Enabled = guiEnabled
 		end
 	end)
+	
 end
-coroutine.wrap(OYAZ_fake_script)()
+coroutine.wrap(AGTX_fake_script)()
