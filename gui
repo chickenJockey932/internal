@@ -1,46 +1,35 @@
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
-local TextLabel = Instance.new("TextLabel")
 local ScriptBox = Instance.new("TextBox")
 local Execute = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
 local Clear = Instance.new("TextButton")
+local UICorner_2 = Instance.new("UICorner")
+local UICorner_3 = Instance.new("UICorner")
 
-ScreenGui.Name = "Executor"
-ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 Frame.Parent = ScreenGui
 Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.0268656705, 0, 0.215361446, 0)
-Frame.Size = UDim2.new(0, 423, 0, 299)
-
-TextLabel.Parent = Frame
-TextLabel.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.BorderSizePixel = 0
-TextLabel.Size = UDim2.new(0, 98, 0, 30)
-TextLabel.Font = Enum.Font.SourceSans
-TextLabel.Text = "Syntra Internal"
-TextLabel.TextColor3 = Color3.fromRGB(100, 100, 100)
-TextLabel.TextSize = 14.000
+Frame.Position = UDim2.new(0.0502846316, 0, 0.08584328, 0)
+Frame.Size = UDim2.new(0, 582, 0, 365)
 
 ScriptBox.Name = "ScriptBox"
 ScriptBox.Parent = Frame
 ScriptBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 ScriptBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ScriptBox.BorderSizePixel = 0
-ScriptBox.Position = UDim2.new(0, 0, 0.117056653, 0)
-ScriptBox.Size = UDim2.new(0, 421, 0, 229)
+ScriptBox.Position = UDim2.new(0, 0, 0.0684931502, 0)
+ScriptBox.Size = UDim2.new(0, 582, 0, 311)
 ScriptBox.ClearTextOnFocus = false
 ScriptBox.Font = Enum.Font.SourceSans
-ScriptBox.MultiLine = true
-ScriptBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-ScriptBox.PlaceholderText = "-- paste your script here"
-ScriptBox.Text = ""
-ScriptBox.TextColor3 = Color3.fromRGB(150, 150, 150)
+ScriptBox.Text = "-your script here"
+ScriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 ScriptBox.TextSize = 14.000
+ScriptBox.TextWrapped = true
 ScriptBox.TextXAlignment = Enum.TextXAlignment.Left
 ScriptBox.TextYAlignment = Enum.TextYAlignment.Top
 
@@ -49,76 +38,104 @@ Execute.Parent = Frame
 Execute.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Execute.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Execute.BorderSizePixel = 0
-Execute.Position = UDim2.new(0, 0, 0.903914332, 0)
-Execute.Size = UDim2.new(0, 72, 0, 27)
+Execute.Position = UDim2.new(0, 0, 0.92328769, 0)
+Execute.Size = UDim2.new(0, 58, 0, 28)
 Execute.Font = Enum.Font.SourceSans
 Execute.Text = "Execute"
-Execute.TextColor3 = Color3.fromRGB(100, 100, 100)
+Execute.TextColor3 = Color3.fromRGB(200, 200, 200)
 Execute.TextSize = 14.000
+
+UICorner.Parent = Execute
 
 Clear.Name = "Clear"
 Clear.Parent = Frame
 Clear.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Clear.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Clear.BorderSizePixel = 0
-Clear.Position = UDim2.new(0.824527323, 0, 0.903009832, 0)
-Clear.Size = UDim2.new(0, 72, 0, 27)
+Clear.Position = UDim2.new(0.900343657, 0, 0.92328769, 0)
+Clear.Size = UDim2.new(0, 58, 0, 28)
 Clear.Font = Enum.Font.SourceSans
 Clear.Text = "Clear"
-Clear.TextColor3 = Color3.fromRGB(100, 100, 100)
+Clear.TextColor3 = Color3.fromRGB(200, 200, 200)
 Clear.TextSize = 14.000
 
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
+UICorner_2.Parent = Clear
 
-local player = Players.LocalPlayer
+UICorner_3.Parent = Frame
 
-local guiEnabled = true
 
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-	if gameProcessed then return end
+	local script = Instance.new('LocalScript', Frame)
 
-	if input.KeyCode == Enum.KeyCode.Insert then
-		guiEnabled = not guiEnabled
-		ScreenGui.Enabled = guiEnabled
-	end
-end)
+	local ScreenGui = script.Parent.Parent
+	local Frame = script.Parent
+	local ScriptBox = script.Parent.ScriptBox
+	local Execute = script.Parent.Execute
+	local Clear = script.Parent.Clear
+	
+	local UserInputService = game:GetService("UserInputService")
+	local Players = game:GetService("Players")
+	
+	local player = Players.LocalPlayer
+	
+	local guiEnabled = true
+	
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if gameProcessed then return end
+	
+		if input.KeyCode == Enum.KeyCode.Insert then
+			guiEnabled = not guiEnabled
+			ScreenGui.Enabled = guiEnabled
+		end
+	end)
+	
+	local UserInputService = game:GetService("UserInputService")
+	
+	local dragging = false
+	local dragStart = nil
+	local startPos = nil
+	
 
-local UserInputService = game:GetService("UserInputService")
+	Frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = Frame.Position
+	
 
-local dragging = false
-local dragStart = nil
-local startPos = nil
-
--- Capture when the mouse button goes down
-Frame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = input.Position
-		startPos = Frame.Position
-
-		-- Optional: Capture the input so nothing else interrupts it
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+	
+	local UserInputService = game:GetService("UserInputService")
+	
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if not gameProcessed and input.KeyCode == Enum.KeyCode.P then
+			local success, err = pcall(function()
+				loadstring(ScriptBox.Text)()
+			end)
+			if not success then
+				warn("Error running script:", err)
 			end
-		end)
-	end
-end)
+		end
+	end)
+	
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			local delta = input.Position - dragStart
+			Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+				startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+	end)
+	
+	Clear.MouseButton1Click:Connect(function()
+		ScriptBox.Text = ""
+	end)
+	
+	Execute.MouseButton1Click:Connect(function()
+		loadstring(ScriptBox.Text)()
+	end)
 
--- Update the frame position as the mouse moves
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStart
-		Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-	end
-end)
-
-Clear.MouseButton1Click:Connect(function()
-	ScriptBox.Text = ""
-end)
-
-Execute.MouseButton1Click:Connect(function()
-	loadstring(ScriptBox.Text)()
-end)
