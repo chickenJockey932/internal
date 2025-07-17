@@ -77,9 +77,6 @@ UICorner_2.Parent = Clear
 
 UICorner_3.Parent = Frame
 
-
-	local script = Instance.new('LocalScript', cool)
-
 	local ScreenGui = script.Parent
 	local Frame = script.Parent.Frame
 	local ScriptBox = script.Parent.Frame.ScriptBox
