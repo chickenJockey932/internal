@@ -77,12 +77,7 @@ UICorner_2.Parent = Clear
 
 UICorner_3.Parent = Frame
 
-	local ScreenGui = script.Parent
-	local Frame = script.Parent.Frame
-	local ScriptBox = script.Parent.Frame.ScriptBox
-	local Execute = script.Parent.Frame.Execute
-	local Clear = script.Parent.Frame.Clear
-	
+
 	local UserInputService = game:GetService("UserInputService")
 	local Players = game:GetService("Players")
 	
@@ -105,7 +100,6 @@ UICorner_3.Parent = Frame
 	local dragStart = nil
 	local startPos = nil
 	
-	-- Capture when the mouse button goes down
 	Frame.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
 			dragging = true
