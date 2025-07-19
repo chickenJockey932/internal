@@ -81,6 +81,17 @@ clearBtn.TextSize = 14
 clearBtn.BorderSizePixel = 0
 clearBtn.AutoButtonColor = false
 
+local UserInputService = game:GetService("UserInputService")
+
+local guiVisible = true
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.Insert then
+        guiVisible = not guiVisible
+        gui.Enabled = guiVisible
+    end
+end)
+
 -- Resize Handle (bottom-right corner)
 local resizeHandle = Instance.new("Frame", frame)
 resizeHandle.Size = UDim2.new(0, 10, 0, 10)
