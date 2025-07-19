@@ -1,6 +1,8 @@
-local StarterGui = game:GetService("StarterGui")
-StarterGui:SetCore("SendNotification", { 
-Title = "Syntra",
-Text = "Syntra Has Injected Succesfully"
-Icon = "rbxassetid://92122764826378"
-})
+pcall(function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Syntra",
+        Text = "Syntra Has Injected Successfully",
+        Icon = "rbxassetid://92122764826378",
+        Duration = 5
+    })
+end)
