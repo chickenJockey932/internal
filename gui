@@ -81,8 +81,6 @@ clearBtn.TextSize = 14
 clearBtn.BorderSizePixel = 0
 clearBtn.AutoButtonColor = false
 
-local UserInputService = game:GetService("UserInputService")
-
 local guiVisible = true
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
