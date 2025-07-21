@@ -21,7 +21,7 @@ topBar.Size = UDim2.new(1, 0, 0, 25)
 topBar.BackgroundColor3 = Color3.fromRGB(20, 25, 35)
 topBar.BorderSizePixel = 0
 
--- Minimize Button
+-- Minimize Button (top-left arrow)
 local minimizeBtn = Instance.new("TextButton", topBar)
 minimizeBtn.Font = Enum.Font.SourceSans
 minimizeBtn.Size = UDim2.new(0, 25, 1, 0)
@@ -43,7 +43,7 @@ title.Font = Enum.Font.Code
 title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
 
--- Code Box
+-- Code box
 local codeBox = Instance.new("TextBox", frame)
 codeBox.Position = UDim2.new(0, 10, 0, 35)
 codeBox.Size = UDim2.new(1, -20, 1, -80)
@@ -57,16 +57,7 @@ codeBox.ClearTextOnFocus = false
 codeBox.MultiLine = true
 codeBox.TextWrapped = false
 codeBox.Text = "-- type your script here"
-codeBox.AutomaticCanvasSize = Enum.AutomaticSize.None
-codeBox.ClipsDescendants = true
-codeBox.TextEditable = true
-codeBox.RichText = false
-codeBox.TextTruncate = Enum.TextTruncate.None
-codeBox.ScrollBarThickness = 6
-codeBox.VerticalScrollBarInset = Enum.ScrollBarInset.Always
-codeBox.HorizontalScrollBarInset = Enum.ScrollBarInset.Always
 
--- Execute Button
 local execBtn = Instance.new("TextButton", frame)
 execBtn.Size = UDim2.new(0, 90, 0, 22)
 execBtn.Position = UDim2.new(0, 10, 1, -35)
@@ -78,10 +69,10 @@ execBtn.TextSize = 14
 execBtn.BorderSizePixel = 0
 execBtn.AutoButtonColor = false
 
--- Clear Button (right of Execute)
+-- Clear Button (to the right of Execute)
 local clearBtn = Instance.new("TextButton", frame)
 clearBtn.Size = UDim2.new(0, 90, 0, 22)
-clearBtn.Position = UDim2.new(0, 110, 1, -35)
+clearBtn.Position = UDim2.new(0, 110, 1, -35) -- 10 + 90 + 10 spacing
 clearBtn.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
 clearBtn.Text = "Clear"
 clearBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -90,7 +81,6 @@ clearBtn.TextSize = 14
 clearBtn.BorderSizePixel = 0
 clearBtn.AutoButtonColor = false
 
--- Insert Key Toggle
 local guiVisible = true
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -100,7 +90,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- Resize Handle
+-- Resize Handle (bottom-right corner)
 local resizeHandle = Instance.new("Frame", frame)
 resizeHandle.Size = UDim2.new(0, 10, 0, 10)
 resizeHandle.Position = UDim2.new(1, -10, 1, -10)
@@ -116,7 +106,7 @@ resizeHandle.InputBegan:Connect(function(input)
 		resizing = true
 		startPos = input.Position
 		startSize = frame.Size
-		frame.Draggable = false
+		frame.Draggable = false -- disable dragging during resize
 	end
 end)
 
@@ -124,7 +114,7 @@ UserInputService.InputEnded:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		if resizing then
 			resizing = false
-			frame.Draggable = true
+			frame.Draggable = true -- re-enable dragging after resize
 		end
 	end
 end)
@@ -140,10 +130,10 @@ end)
 
 -- Minimize Logic
 local originalSize = frame.Size
-local minimized = false
 
 minimizeBtn.MouseButton1Click:Connect(function()
 	minimized = not minimized
+
 	if minimized then
 		originalSize = frame.Size
 		codeBox.Visible = false
@@ -162,10 +152,10 @@ minimizeBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Button Logic
+-- Button Actions
 execBtn.MouseButton1Click:Connect(function()
 	local scriptSource = codeBox.Text
-	loadstring(scriptSource)() -- exploit-only
+	loadstring(scriptSource)() -- exploit only
 end)
 
 clearBtn.MouseButton1Click:Connect(function()
