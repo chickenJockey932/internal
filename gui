@@ -1,119 +1,163 @@
---[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
-local gui = Instance.new("ScreenGui")
-gui.Name = "WallWareGUI"
-gui.ResetOnSpawn = false
-gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 400, 0, 250)
-frame.Position = UDim2.new(0.5, -200, 0.5, -125)
-frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-frame.BorderSizePixel = 1
-frame.Parent = gui
-
-local title = Instance.new("TextLabel")
-title.Text = "Wall-Ware"
-title.Size = UDim2.new(1, 0, 0, 30)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.BackgroundTransparency = 1
-title.TextColor3 = Color3.fromRGB(0, 0, 0)
-title.Font = Enum.Font.SourceSansBold
-title.TextSize = 22
-title.Parent = frame
-
-local underline = Instance.new("Frame")
-underline.Size = UDim2.new(1, 0, 0, 1)
-underline.Position = UDim2.new(0, 0, 0, 30)
-underline.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-underline.BorderSizePixel = 0
-underline.Parent = frame
-
-local closeBtn = Instance.new("TextButton")
-closeBtn.Text = "X"
-closeBtn.Size = UDim2.new(0, 30, 0, 25)
-closeBtn.Position = UDim2.new(1, -35, 0, 2)
-closeBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-closeBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
-closeBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
-closeBtn.Font = Enum.Font.SourceSansBold
-closeBtn.TextSize = 18
-closeBtn.Parent = frame
-
-local executeBtn = Instance.new("TextButton")
-executeBtn.Text = "Execute"
-executeBtn.Size = UDim2.new(0, 70, 0, 25)
-executeBtn.Position = UDim2.new(1, -110, 0, 2)
-executeBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-executeBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
-executeBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
-executeBtn.Font = Enum.Font.SourceSansBold
-executeBtn.TextSize = 18
-executeBtn.Parent = frame
-
-local textbox = Instance.new("TextBox")
-textbox.Size = UDim2.new(1, -20, 1, -50)
-textbox.Position = UDim2.new(0, 10, 0, 40)
-textbox.BackgroundColor3 = Color3.fromRGB(245, 245, 245)
-textbox.BorderColor3 = Color3.fromRGB(0, 0, 0)
-textbox.TextColor3 = Color3.fromRGB(0, 0, 0)
-textbox.Font = Enum.Font.Code
-textbox.TextSize = 16
-textbox.MultiLine = true
-textbox.ClearTextOnFocus = false
-textbox.TextWrapped = false
-textbox.Text = "-- Type your script here"
-textbox.TextXAlignment = Enum.TextXAlignment.Left
-textbox.TextYAlignment = Enum.TextYAlignment.Top
-textbox.Parent = frame
-
--- Button functionality
-closeBtn.MouseButton1Click:Connect(function()
-    gui:Destroy()
-end)
-
-executeBtn.MouseButton1Click:Connect(function()
-    local scriptText = textbox.Text
-    local func, err = loadstring(scriptText)
-    if func then
-        pcall(func)
-    else
-        warn("Error in script: " .. tostring(err))
-    end
-end)
-
--- Mobile and PC drag support
+local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local player = Players.LocalPlayer
 
-local dragging = false
-local dragInput, dragStart, startPos
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "ImGuiExecutor"
+gui.ResetOnSpawn = false
 
-title.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = frame.Position
+-- Main Frame
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 450, 0, 300)
+frame.Position = UDim2.new(0.5, -225, 0.5, -150)
+frame.BackgroundColor3 = Color3.fromRGB(25, 30, 40)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
 
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
+-- Top Bar
+local topBar = Instance.new("Frame", frame)
+topBar.Size = UDim2.new(1, 0, 0, 25)
+topBar.BackgroundColor3 = Color3.fromRGB(20, 25, 35)
+topBar.BorderSizePixel = 0
+
+-- Minimize Button (top-left arrow)
+local minimizeBtn = Instance.new("TextButton", topBar)
+minimizeBtn.Font = Enum.Font.SourceSans
+minimizeBtn.Size = UDim2.new(0, 25, 1, 0)
+minimizeBtn.Position = UDim2.new(0, 0, 0, 0)
+minimizeBtn.BackgroundTransparency = 1
+minimizeBtn.Text = "v"
+minimizeBtn.TextColor3 = Color3.fromRGB(180, 180, 180)
+minimizeBtn.TextSize = 18
+minimizeBtn.TextXAlignment = Enum.TextXAlignment.Center
+
+-- Title Label
+local title = Instance.new("TextLabel", topBar)
+title.Size = UDim2.new(1, -25, 1, 0)
+title.Position = UDim2.new(0, 25, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Syntra"
+title.TextColor3 = Color3.fromRGB(180, 180, 180)
+title.Font = Enum.Font.Code
+title.TextSize = 16
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Code box
+local codeBox = Instance.new("TextBox", frame)
+codeBox.Position = UDim2.new(0, 10, 0, 35)
+codeBox.Size = UDim2.new(1, -20, 1, -80)
+codeBox.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
+codeBox.TextColor3 = Color3.fromRGB(220, 220, 220)
+codeBox.Font = Enum.Font.Code
+codeBox.TextSize = 15
+codeBox.TextXAlignment = Enum.TextXAlignment.Left
+codeBox.TextYAlignment = Enum.TextYAlignment.Top
+codeBox.ClearTextOnFocus = false
+codeBox.MultiLine = true
+codeBox.TextWrapped = false
+codeBox.Text = "-- type your script here"
+
+local execBtn = Instance.new("TextButton", frame)
+execBtn.Size = UDim2.new(0, 90, 0, 22)
+execBtn.Position = UDim2.new(0, 10, 1, -35)
+execBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+execBtn.Text = "Execute"
+execBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+execBtn.Font = Enum.Font.Code
+execBtn.TextSize = 14
+execBtn.BorderSizePixel = 0
+execBtn.AutoButtonColor = false
+
+-- Clear Button (to the right of Execute)
+local clearBtn = Instance.new("TextButton", frame)
+clearBtn.Size = UDim2.new(0, 90, 0, 22)
+clearBtn.Position = UDim2.new(0, 110, 1, -35) -- 10 + 90 + 10 spacing
+clearBtn.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+clearBtn.Text = "Clear"
+clearBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+clearBtn.Font = Enum.Font.Code
+clearBtn.TextSize = 14
+clearBtn.BorderSizePixel = 0
+clearBtn.AutoButtonColor = false
+
+local guiVisible = true
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.Insert then
+        guiVisible = not guiVisible
+        gui.Enabled = guiVisible
     end
 end)
 
-title.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
+-- Resize Handle (bottom-right corner)
+local resizeHandle = Instance.new("Frame", frame)
+resizeHandle.Size = UDim2.new(0, 10, 0, 10)
+resizeHandle.Position = UDim2.new(1, -10, 1, -10)
+resizeHandle.BackgroundColor3 = Color3.fromRGB(60, 80, 120)
+resizeHandle.BorderSizePixel = 0
+resizeHandle.Name = "ResizeHandle"
+
+local resizing = false
+local startPos, startSize
+
+resizeHandle.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		resizing = true
+		startPos = input.Position
+		startSize = frame.Size
+		frame.Draggable = false -- disable dragging during resize
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		if resizing then
+			resizing = false
+			frame.Draggable = true -- re-enable dragging after resize
+		end
+	end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-                                   startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
+	if resizing and input.UserInputType == Enum.UserInputType.MouseMovement then
+		local delta = input.Position - startPos
+		local newX = math.clamp(startSize.X.Offset + delta.X, 300, 800)
+		local newY = math.clamp(startSize.Y.Offset + delta.Y, 200, 600)
+		frame.Size = UDim2.new(0, newX, 0, newY)
+	end
+end)
+
+-- Minimize Logic
+local originalSize = frame.Size
+
+minimizeBtn.MouseButton1Click:Connect(function()
+	minimized = not minimized
+
+	if minimized then
+		originalSize = frame.Size
+		codeBox.Visible = false
+		execBtn.Visible = false
+		clearBtn.Visible = false
+		resizeHandle.Visible = false
+		frame.Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, 0, 25)
+		minimizeBtn.Text = ">"
+	else
+		codeBox.Visible = true
+		execBtn.Visible = true
+		clearBtn.Visible = true
+		resizeHandle.Visible = true
+		frame.Size = originalSize
+		minimizeBtn.Text = "v"
+	end
+end)
+
+-- Button Actions
+execBtn.MouseButton1Click:Connect(function()
+	local scriptSource = codeBox.Text
+	loadstring(scriptSource)()
+end)
+
+clearBtn.MouseButton1Click:Connect(function()
+	codeBox.Text = ""
 end)
